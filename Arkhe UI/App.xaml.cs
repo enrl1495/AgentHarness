@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.AI;
 using AgentHarness.Hosting;
 using AgentHarness.WinUI.ViewModels;
 
@@ -18,22 +19,17 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        // Build service provider with Core services
         var services = new ServiceCollection();
         
-        // Call AddAgentHarnessCore() to register all Core services
-        // Note: IChatClient and IEmbeddingGenerator are NOT registered by AddAgentHarnessCore()
-        // They should be registered separately by the host when Settings configures an endpoint
+        services.AddSingleton<IChatClient, NoOpChatClient>();
         services.AddAgentHarnessCore();
         
-        // Register ViewModels
         services.AddSingleton<MainViewModel>();
         services.AddTransient<ChatViewModel>();
         services.AddTransient<LibraryViewModel>();
         services.AddTransient<SkillsViewModel>();
         services.AddTransient<SettingsViewModel>();
         
-        // Register Pages for DI navigation
         services.AddTransient<HomePage>();
         services.AddTransient<ChatPage>();
         services.AddTransient<LibraryPage>();
@@ -42,7 +38,6 @@ public partial class App : Application
         
         _services = services.BuildServiceProvider();
 
-        // Create and activate main window
         var mainWindow = new MainWindow();
         mainWindow.Activate();
     }
@@ -50,5 +45,39 @@ public partial class App : Application
     public T GetService<T>() where T : notnull
     {
         return Services.GetRequiredService<T>();
+    }
+
+    private sealed class NoOpChatClient : IChatClient
+    {
+        public Task<ChatCompletion> CompleteAsync(
+            IList<ChatMessage> messages,
+            ChatOptions? options = null,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(new ChatCompletion(new ChatMessage(ChatRole.Assistant, "No IChatClient configured.")));
+        }
+
+        public IAsyncEnumerable<StreamingChatCompletionUpdate> CompleteStreamingAsync(
+            IList<ChatMessage> messages,
+            ChatOptions? options = null,
+            CancellationToken cancellationToken = default)
+        {
+            return GetStreamingAsync();
+
+            async IAsyncEnumerable<StreamingChatCompletionUpdate> GetStreamingAsync(
+                [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken ct = default)
+            {
+                yield return new StreamingChatCompletionUpdate
+                {
+                    Text = "No IChatClient configured."
+                };
+            }
+        }
+
+        public ChatClientMetadata Metadata => new("NoOpChatClient");
+
+        public void Dispose() { }
+
+        public object? GetService(Type serviceType, object? key = null) => null;
     }
 }
