@@ -1,0 +1,76 @@
+# SDD Configuration — Arkhe UI
+# Generated: 2026-05-27 by sdd-init
+schema: spec-driven
+
+context: |
+  Arkhe UI — WinUI 3 desktop shell (presentation layer of AgentHarness ecosystem).
+  Tech: .NET 10, Windows App SDK, XAML + C#, CommunityToolkit.Mvvm (MVVM).
+  Project: AgentHarness.WinUI.csproj in net10.0-windows10.0.19041.0.
+  References Core sibling projects via ProjectReference; DI via AddAgentHarnessCore().
+  Parent hub: ../openspec/ (rebuilt-v2 active). No test infrastructure yet in this folder.
+  Design system: Minimal dark theme, ModernTheme.xaml + ViewTemplates.xaml.
+
+rules:
+  proposal:
+    - Changes target this project; parent hub coordinates cross-project changes.
+    - Reference parent hub openspec/config.yaml for ecosystem-wide rules.
+    - Include whether new XAML views, ViewModels, or resource dictionaries are affected.
+  specs:
+    - Use Given/When/Then for scenarios.
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY).
+    - XAML UI scenarios: describe visual states, bindings, and command flows.
+  design:
+    - Document XAML resource dictionary decisions and naming conventions.
+    - Reference ARCHITECTURE.md for the design system baseline (when created).
+    - Include view-ViewModel wiring and DI registration approach.
+  tasks:
+    - Group by phase, use hierarchical numbering.
+    - Annotate which view/page each task targets.
+  apply:
+    - Follow CommunityToolkit.Mvvm patterns (ObservableObject, RelayCommand).
+    - XAML: use x:Bind by default, StaticResource for theme references.
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "dotnet build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas.
+    - Preserve main specs after archive.
+
+testing:
+  strict_tdd: false
+  reason: "No test infrastructure in this project folder. Child of multi-project solution; tests live in parent AgentHarness.Tests (xUnit)."
+  detected: 2026-05-27
+
+  test_runner:
+    command: "—"
+    framework: "—"
+    path: "—"
+
+  test_layers:
+    - layer: Unit
+      available: false
+      tool: "—"
+    - layer: Integration
+      available: false
+      tool: "—"
+    - layer: E2E
+      available: false
+      tool: "—"
+
+  coverage:
+    available: false
+    command: "—"
+
+  quality_tools:
+    - tool: Linter
+      available: false
+      command: "—"
+    - tool: Type checker
+      available: false
+      command: "— (available via dotnet build once .csproj exists, nullable enabled)"
+    - tool: Formatter
+      available: false
+      command: "—"

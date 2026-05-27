@@ -1,0 +1,25 @@
+﻿# Build
+bin/
+obj/
+*.binlog
+*.user
+*.suo
+
+# NuGet
+*.nupkg
+**/packages/*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Tooling
+.atl/
+
+# Logs
+*.log

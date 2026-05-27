@@ -1,0 +1,63 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================
+         SEGUE FLUENT ICONS FONT
+         ============================================ -->
+    <FontFamily x:Key="SegoeFluentIcons">Segoe Fluent Icons</FontFamily>
+
+    <!-- ============================================
+         NAVIGATION ICONS
+         ============================================ -->
+
+    <!-- Home:  (U+E189) -->
+    <x:String x:Key="Icon.Home">&#xE189;</x:String>
+
+    <!-- Chat:  (U+E154) -->
+    <x:String x:Key="Icon.Chat">&#xE154;</x:String>
+
+    <!-- Library:  (U+E1DD) -->
+    <x:String x:Key="Icon.Library">&#xE1DD;</x:String>
+
+    <!-- Skills:  (U+E711) -->
+    <x:String x:Key="Icon.Skills">&#xE711;</x:String>
+
+    <!-- Settings:  (U+E713) -->
+    <x:String x:Key="Icon.Settings">&#xE713;</x:String>
+
+    <!-- ============================================
+         ACTION ICONS
+         ============================================ -->
+
+    <!-- Send:  (U+E157) -->
+    <x:String x:Key="Icon.Send">&#xE157;</x:String>
+
+    <!-- Attach:  (U+E156) -->
+    <x:String x:Key="Icon.Attach">&#xE156;</x:String>
+
+    <!-- Mic:  (U+E710) -->
+    <x:String x:Key="Icon.Mic">&#xE710;</x:String>
+
+    <!-- Search:  (U+E114) -->
+    <x:String x:Key="Icon.Search">&#xE114;</x:String>
+
+    <!-- Close:  (U+E10A) -->
+    <x:String x:Key="Icon.Close">&#xE10A;</x:String>
+
+    <!-- ============================================
+         ICON TEXTBLOCK STYLE
+         ============================================ -->
+    <Style x:Key="Icon.TextBlock" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+    </Style>
+
+    <Style x:Key="Icon.Large" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+    </Style>
+
+</ResourceDictionary>

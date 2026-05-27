@@ -1,0 +1,10 @@
+<Solution>
+  <Project Id="AgentHarness.WinUI" Path="AgentHarness.WinUI.csproj" />
+  <Project Id="AgentHarness.Abstractions" Path="..\Arkhe Core\AgentHarness.Abstractions\AgentHarness.Abstractions.csproj" />
+  <Project Id="AgentHarness.Core" Path="..\Arkhe Core\AgentHarness.Core\AgentHarness.Core.csproj" />
+  <Project Id="AgentHarness.Hosting" Path="..\Arkhe Core\AgentHarness.Hosting\AgentHarness.Hosting.csproj" />
+  <ProjectConfiguration>
+    <Project Id="AgentHarness.WinUI" Configuration="Debug" Platform="x64" />
+    <Project Id="AgentHarness.WinUI" Configuration="Release" Platform="x64" />
+  </ProjectConfiguration>
+</Solution>

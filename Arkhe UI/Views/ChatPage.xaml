@@ -1,0 +1,170 @@
+<Page
+    x:Class="AgentHarness.WinUI.ChatPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AgentHarness.WinUI"
+    xmlns:viewmodels="using:AgentHarness.WinUI.ViewModels"
+    xmlns:converters="using:AgentHarness.WinUI.Converters">
+
+    <Page.Resources>
+        <!-- Converters for compiled bindings -->
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:InvertedBoolToVisibilityConverter x:Key="InvertedVisibilityConverter" />
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converters:AlignmentConverter x:Key="AlignmentConverter" />
+        <converters:BubbleBackgroundConverter x:Key="BubbleBackgroundConverter" />
+        <converters:DateTimeFormatter x:Key="DateTimeFormatter" />
+        <converters:LatencyFormatter x:Key="LatencyFormatter" />
+        <converters:TokensFormatter x:Key="TokensFormatter" />
+        <converters:PercentFormatter x:Key="PercentFormatter" />
+        <converters:StringNotEmptyToBoolConverter x:Key="StringNotEmptyToBoolConverter" />
+    </Page.Resources>
+
+    <Grid Background="{StaticResource Brush.Background.MicaAlt}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Context Progress Bar (2px micro-bar) -->
+        <ProgressBar
+            Grid.Row="0"
+            Value="{x:Bind ViewModel.ContextUsage, Mode=OneWay}"
+            Maximum="1.0"
+            Height="2"
+            Margin="{StaticResource Padding.Page}">
+            <ToolTipService.ToolTip>
+                <ToolTip>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Context:" Style="{StaticResource TextBlock.Caption}" />
+                        <TextBlock
+                            Text="{x:Bind ViewModel.ContextUsage, Converter={StaticResource PercentFormatter}, Mode=OneWay}"
+                            Style="{StaticResource TextBlock.Caption}" />
+                    </StackPanel>
+                </ToolTip>
+            </ToolTipService.ToolTip>
+        </ProgressBar>
+
+        <!-- Main Chat Area -->
+        <Grid Grid.Row="1" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Message List -->
+            <ListView
+                Grid.Column="0"
+                ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
+                ItemTemplate="{StaticResource ChatMessageTemplate}"
+                Style="{StaticResource ListView.Chat}"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                BorderThickness="0"
+                Background="Transparent" />
+
+            <!-- Thought Log Sidebar (320px, right side) -->
+            <Border
+                Grid.Column="1"
+                Width="320"
+                Background="{StaticResource Brush.Background.Surface}"
+                Visibility="{x:Bind IsThoughtPanelVisible, Mode=OneWay}">
+                <Grid RowSpacing="8" Padding="{StaticResource Padding.Card}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Header with collapse button -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Text="Thought Log"
+                            Style="{StaticResource TextBlock.Title}" />
+                        <Button
+                            Grid.Column="1"
+                            Content="✕"
+                            Click="CollapseThoughtPanel_Click"
+                            Style="{StaticResource Button.Primary}"
+                            Padding="8,4"
+                            FontSize="12" />
+                    </Grid>
+
+                    <!-- Thought entries placeholder -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="No thoughts yet"
+                                Style="{StaticResource TextBlock.Caption}"
+                                HorizontalAlignment="Center"
+                                Margin="0,20,0,0" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Input Area -->
+        <Grid Grid.Row="2" RowSpacing="8" Padding="{StaticResource Padding.Page}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- TextBox for input -->
+            <TextBox
+                Grid.Row="0"
+                Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PlaceholderText="Type your message..."
+                Style="{StaticResource TextBox.Primary}"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                MaxHeight="120" />
+
+            <!-- Action Buttons Row -->
+            <Grid Grid.Row="1" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Attach File Button -->
+                <Button
+                    Grid.Column="0"
+                    Command="{x:Bind ViewModel.AttachFileCommand}"
+                    ToolTipService.ToolTip="Attach file">
+                    <FontIcon
+                        Glyph="&#xE898;"
+                        FontFamily="{StaticResource SegoeFluentIcons}"
+                        FontSize="16" />
+                </Button>
+
+                <!-- Spacer -->
+                <Border Grid.Column="1" />
+
+                <!-- Microphone and Send Buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+                    <Button
+                        Command="{x:Bind ViewModel.StartVoiceCommand}"
+                        ToolTipService.ToolTip="Voice input">
+                        <FontIcon
+                            Glyph="&#xE720;"
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            FontSize="16" />
+                    </Button>
+
+                    <Button
+                        Content="Send"
+                        Command="{x:Bind ViewModel.SendMessageCommand}"
+                        Style="{StaticResource Button.Primary}"
+                        IsEnabled="{x:Bind ViewModel.InputText, Converter={StaticResource StringNotEmptyToBoolConverter}, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

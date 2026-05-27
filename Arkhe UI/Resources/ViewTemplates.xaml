@@ -1,0 +1,191 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewmodels="using:AgentHarness.WinUI.ViewModels">
+
+    <!-- ============================================
+         CHAT MESSAGE TEMPLATE
+         Full implementation with compiled bindings
+         ============================================ -->
+    <DataTemplate x:Key="ChatMessageTemplate">
+        <Border
+            CornerRadius="{StaticResource BubbleCornerRadius}"
+            HorizontalAlignment="{Binding IsUser, Converter={StaticResource AlignmentConverter}}"
+            Background="{Binding IsUser, Converter={StaticResource BubbleBackgroundConverter}}"
+            Padding="12,10"
+            Margin="0,4"
+            MaxWidth="600">
+            <StackPanel>
+                <!-- Message Text -->
+                <TextBlock
+                    Text="{Binding Text}"
+                    Style="{StaticResource TextBlock.Body}"
+                    TextWrapping="Wrap" />
+
+                <!-- Metadata Row (Assistant only) -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    Visibility="{Binding IsUser, Converter={StaticResource InvertedVisibilityConverter}}">
+                    <TextBlock
+                        Text="{Binding LatencyMs, Converter={StaticResource LatencyFormatter}}"
+                        Style="{StaticResource TextBlock.Caption}"
+                        Visibility="{Binding LatencyMs, Converter={StaticResource NullToVisibilityConverter}}" />
+                    <TextBlock
+                        Text="{Binding TokensUsed, Converter={StaticResource TokensFormatter}}"
+                        Style="{StaticResource TextBlock.Caption}"
+                        Visibility="{Binding TokensUsed, Converter={StaticResource NullToVisibilityConverter}}" />
+                </StackPanel>
+
+                <!-- Timestamp and Thought Toggle -->
+                <Grid Margin="0,4,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        Text="{Binding Timestamp, Converter={StaticResource DateTimeFormatter}}"
+                        Style="{StaticResource TextBlock.Caption}"
+                        HorizontalAlignment="{Binding IsUser, Converter={StaticResource AlignmentConverter}}" />
+                    <Button
+                        Grid.Column="1"
+                        Content="View Thought"
+                        Command="{Binding ToggleThoughtCommand}"
+                        Visibility="{Binding ThoughtContent, Converter={StaticResource NullToVisibilityConverter}}"
+                        Style="{StaticResource Button.Primary}"
+                        Padding="4,2"
+                        FontSize="10" />
+                </Grid>
+
+                <!-- Collapsible Thought Content -->
+                <Border
+                    Style="{StaticResource ThoughtPanelStyle}"
+                    Background="{StaticResource ShimmerBrush}"
+                    Visibility="{Binding IsThoughtExpanded, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Margin="0,8,0,0">
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Text="{Binding ThoughtContent}"
+                            Style="{StaticResource TextBlock.Caption}"
+                            TextWrapping="Wrap" />
+                        <Button
+                            Content="Collapse"
+                            Command="{Binding ToggleThoughtCommand}"
+                            Style="{StaticResource Button.Primary}"
+                            HorizontalAlignment="Right"
+                            Padding="8,4" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <!-- ============================================
+         LIBRARY CARD TEMPLATE
+         Glass surface with tags and relevance badge
+         ============================================ -->
+    <DataTemplate x:Key="LibraryCardTemplate">
+        <Border
+            Style="{StaticResource Card.Container}"
+            Background="{StaticResource Brush.Background.Glass}">
+            <Grid RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Title -->
+                <TextBlock
+                    Grid.Row="0"
+                    Text="{Binding Title}"
+                    Style="{StaticResource TextBlock.Title}"
+                    TextTrimming="CharacterEllipsis" />
+
+                <!-- Tags -->
+                <ItemsControl
+                    Grid.Row="1"
+                    ItemsSource="{Binding Tags}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Chip.Tag}">
+                                <TextBlock Text="{Binding}" Style="{StaticResource TextBlock.Caption}" />
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Relevance Badge -->
+                <Border
+                    Grid.Row="2"
+                    Style="{StaticResource Badge.Relevance}"
+                    HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Spacing="2">
+                        <TextBlock
+                            Text="{Binding RelevanceScore}"
+                            Style="{StaticResource TextBlock.Caption}"
+                            Foreground="{StaticResource Brush.Text.Primary}" />
+                        <TextBlock
+                            Text="%"
+                            Style="{StaticResource TextBlock.Caption}"
+                            Foreground="{StaticResource Brush.Text.Primary}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!-- ============================================
+         SKILL ROW TEMPLATE
+         Card with left border and toggle switch
+         ============================================ -->
+    <DataTemplate x:Key="SkillRowTemplate">
+        <Border
+            Background="{StaticResource Brush.Background.Glass}"
+            CornerRadius="{StaticResource ControlCornerRadius}"
+            Padding="{StaticResource Padding.Card}"
+            BorderThickness="4,0,0,0">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{Binding IsEnabled, Converter={StaticResource SkillBorderConverter}}" />
+            </Border.BorderBrush>
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Skill Info -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock
+                        Text="{Binding Name}"
+                        Style="{StaticResource TextBlock.Body}"
+                        FontWeight="SemiBold" />
+                    <TextBlock
+                        Text="{Binding Description}"
+                        Style="{StaticResource TextBlock.Caption}"
+                        TextTrimming="CharacterEllipsis"
+                        Foreground="{StaticResource Brush.Text.Secondary}" />
+                    <TextBlock
+                        Text="{Binding FilePath}"
+                        Style="{StaticResource TextBlock.Caption}"
+                        Foreground="{StaticResource Brush.Text.Disabled}"
+                        FontSize="10" />
+                </StackPanel>
+
+                <!-- Toggle Switch -->
+                <ToggleSwitch
+                    Grid.Column="1"
+                    IsOn="{Binding IsEnabled, Mode=TwoWay}"
+                    OffContent=""
+                    OnContent="" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+</ResourceDictionary>

@@ -1,0 +1,68 @@
+<Page
+    x:Class="AgentHarness.WinUI.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:AgentHarness.WinUI.ViewModels"
+    x:DataType="vm:SettingsViewModel">
+
+    <Grid Padding="{StaticResource Padding.Page}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Page Title -->
+        <TextBlock
+            Grid.Row="0"
+            Text="Settings"
+            Style="{StaticResource TextBlock.Title}"
+            Margin="0,0,0,16" />
+
+        <!-- Settings Content -->
+        <StackPanel Grid.Row="1" Spacing="16" MaxWidth="480">
+            <!-- Theme -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Theme" Style="{StaticResource TextBlock.Body}" />
+                <TextBox
+                    Text="{x:Bind ViewModel.Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource TextBox.Primary}" />
+            </StackPanel>
+
+            <!-- Model -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Model" Style="{StaticResource TextBlock.Body}" />
+                <TextBox
+                    Text="{x:Bind ViewModel.Model, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource TextBox.Primary}" />
+            </StackPanel>
+
+            <!-- Endpoint -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Endpoint" Style="{StaticResource TextBlock.Body}" />
+                <TextBox
+                    Text="{x:Bind ViewModel.Endpoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource TextBox.Primary}" />
+            </StackPanel>
+
+            <!-- Accent Color -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Accent Color" Style="{StaticResource TextBlock.Body}" />
+                <TextBox
+                    Text="{x:Bind ViewModel.AccentColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{StaticResource TextBox.Primary}" />
+            </StackPanel>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
+                <Button
+                    Content="Save"
+                    Command="{x:Bind ViewModel.SaveCommand}"
+                    Style="{StaticResource Button.Primary}" />
+                <Button
+                    Content="Reset"
+                    Command="{x:Bind ViewModel.ResetCommand}"
+                    Style="{StaticResource Button.Primary}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,75 @@
+# SDD Configuration — Arkhe Agent Coordination Hub
+# Generated: 2026-05-27 by sdd-init
+schema: spec-driven
+
+context: |
+  Coordination hub for the AgentHarness ecosystem. Not a code project itself.
+  Child code: AgentHarness (.NET 10, C# 14) — Abstractions/Core/Hosting trinity.
+  Child hosts: WinUI 3 desktop shell, CLI REPL.
+  Active change: rebuild-v2 (architectural refactor, 15/28 tasks done).
+  Key docs: resumen-orquestador.md (exec summary), arquitectura-subagente.md (arch report).
+
+rules:
+  proposal:
+    - Changes are tracked at the hub level; implementation executes in child projects.
+    - Include which child project(s) are affected.
+    - Reference orchestrator summary and architecture report for existing state.
+  specs:
+    - Use Given/When/Then for scenarios.
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY).
+  design:
+    - Document architecture decisions with rationale.
+    - Reference AgentHarness ARCHITECTURE.md for the Core design baseline.
+  tasks:
+    - Group by phase, use hierarchical numbering.
+    - Annotate which child project directory each task targets.
+  apply:
+    - Follow existing code patterns in child projects.
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: "dotnet test C:\\Users\\rodri\\Desktop\\RESPALDO_PROYECTOS\\agent-harness-proto\\src\\AgentHarness.Tests\\AgentHarness.Tests.csproj"
+    build_command: "dotnet build C:\\Users\\rodri\\Desktop\\RESPALDO_PROYECTOS\\agent-harness-proto\\src\\AgentHarness.sln"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas.
+    - Preserve hub-level summary artifacts (resumen-orquestador.md) after archive.
+
+testing:
+  strict_tdd: false
+  reason: "Coordination hub has no code to test. Child project tests exist but are external."
+  detected: 2026-05-27
+
+  test_runner:
+    command: "dotnet test AgentHarness.Tests.csproj"
+    framework: xUnit 2.9.3
+    mocking: Moq 4.20.72
+    sdk: Microsoft.NET.Test.Sdk 17.14.1
+    path: "C:\\Users\\rodri\\Desktop\\RESPALDO_PROYECTOS\\agent-harness-proto\\src\\AgentHarness.Tests\\"
+
+  test_layers:
+    - layer: Unit
+      available: true
+      tool: xUnit + Moq
+    - layer: Integration
+      available: true
+      tool: xUnit (Chain* tests against real SQLite)
+    - layer: E2E
+      available: false
+      tool: "—"
+
+  coverage:
+    available: true
+    command: "dotnet test --collect:'XPlat Code Coverage'"
+    tool: coverlet.collector 6.0.4
+
+  quality_tools:
+    - tool: Linter
+      available: false
+      command: "—"
+    - tool: Type checker
+      available: true
+      command: "dotnet build (nullable enabled, implicit usings)"
+    - tool: Formatter
+      available: false
+      command: "—"

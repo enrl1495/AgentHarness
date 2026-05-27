@@ -1,0 +1,29 @@
+<Application
+    x:Class="AgentHarness.WinUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AgentHarness.WinUI"
+    xmlns:converters="using:AgentHarness.WinUI.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/ModernTheme.xaml" />
+                <ResourceDictionary Source="Resources/ViewTemplates.xaml" />
+                <ResourceDictionary Source="Resources/Icons/IconResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- All converters for global scope (required by ViewTemplates.xaml) -->
+            <converters:SkillBorderConverter x:Key="SkillBorderConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:InvertedBoolToVisibilityConverter x:Key="InvertedVisibilityConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:AlignmentConverter x:Key="AlignmentConverter" />
+            <converters:BubbleBackgroundConverter x:Key="BubbleBackgroundConverter" />
+            <converters:DateTimeFormatter x:Key="DateTimeFormatter" />
+            <converters:LatencyFormatter x:Key="LatencyFormatter" />
+            <converters:TokensFormatter x:Key="TokensFormatter" />
+            <converters:PercentFormatter x:Key="PercentFormatter" />
+            <converters:StringNotEmptyToBoolConverter x:Key="StringNotEmptyToBoolConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
