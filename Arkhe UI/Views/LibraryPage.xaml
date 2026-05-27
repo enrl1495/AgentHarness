@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="using:AgentHarness.WinUI.ViewModels"
     xmlns:converters="using:AgentHarness.WinUI.Converters"
-    x:DataType="vm:LibraryViewModel">
+    >
 
     <Grid Padding="{StaticResource Padding.Page}">
         <Grid.RowDefinitions>
@@ -21,14 +21,14 @@
 
             <TextBox
                 Grid.Column="0"
-                Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 PlaceholderText="Search library..."
                 Style="{StaticResource TextBox.Primary}" />
 
             <Button
                 Grid.Column="1"
                 Content="Clear"
-                Command="{x:Bind ClearSearchCommand}"
+                Command="{x:Bind ViewModel.ClearSearchCommand}"
                 Style="{StaticResource Button.Primary}"
                 Padding="16,8" />
         </Grid>
@@ -36,8 +36,8 @@
         <!-- Library GridView -->
         <GridView
             Grid.Row="1"
-            ItemsSource="{x:Bind Results, Mode=OneWay}"
-            SelectedItem="{x:Bind SelectedEntry, Mode=TwoWay}"
+            ItemsSource="{x:Bind ViewModel.Results, Mode=OneWay}"
+            SelectedItem="{x:Bind ViewModel.SelectedEntry, Mode=TwoWay}"
             ItemTemplate="{StaticResource LibraryCardTemplate}"
             SelectionMode="Single">
             <GridView.ItemsPanel>

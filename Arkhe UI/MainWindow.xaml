@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:AgentHarness.WinUI"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    x:DataType="local:MainWindow">
+    >
 
     <Grid Background="{StaticResource Brush.Background.MicaAlt}">
         <Grid.RowDefinitions>
