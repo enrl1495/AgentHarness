@@ -9,19 +9,19 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class SkillViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _name = string.Empty;
+    public partial string Name { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _description = string.Empty;
+    public partial string Description { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _filePath = string.Empty;
+    public partial string FilePath { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private bool _isEnabled;
+    public partial bool IsEnabled { get; set; }
 
     [ObservableProperty]
-    private string _category = string.Empty;
+    public partial string Category { get; set; } = string.Empty;
 
     [RelayCommand]
     private void Toggle()

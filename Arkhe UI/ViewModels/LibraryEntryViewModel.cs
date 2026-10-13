@@ -10,20 +10,20 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class LibraryEntryViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _title = string.Empty;
+    public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _description = string.Empty;
+    public partial string Description { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<string> _tags = new();
+    public partial ObservableCollection<string> Tags { get; set; } = new();
 
     [ObservableProperty]
-    private double _relevanceScore;
+    public partial double RelevanceScore { get; set; }
 
     [ObservableProperty]
-    private string _sourcePath = string.Empty;
+    public partial string SourcePath { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private DateTime _lastIndexed;
+    public partial DateTime LastIndexed { get; set; }
 }

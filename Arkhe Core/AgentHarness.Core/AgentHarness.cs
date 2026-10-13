@@ -109,13 +109,14 @@ public class AgentHarness : IAgent, IAsyncDisposable
         TechnicalEventEmitted?.Invoke(new AgentTechnicalEvent("LLM_Request", "Sending request to LLM...", DateTime.Now));
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        var response = await _chatClient.CompleteAsync(finalContext, options, ct).ConfigureAwait(false);
+        var response = await _chatClient.GetResponseAsync(finalContext, options, ct).ConfigureAwait(false);
         stopwatch.Stop();
 
         TechnicalEventEmitted?.Invoke(new AgentTechnicalEvent("LLM_Response", $"Received in {stopwatch.ElapsedMilliseconds:F0}ms.", DateTime.Now, response.Usage));
 
         // 7. Update memory with the assistant's response
-        var assistantMessage = response.Message;
+        ChatMessage assistantMessage = response.Messages.FirstOrDefault()
+            ?? new ChatMessage(ChatRole.Assistant, response.Text ?? string.Empty);
         await _memoryStore.AddAsync(assistantMessage, ct).ConfigureAwait(false);
 
         return assistantMessage.Text ?? string.Empty;

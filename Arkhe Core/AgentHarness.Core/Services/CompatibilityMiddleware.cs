@@ -18,8 +18,8 @@ public class CompatibilityMiddleware : DelegatingChatClient
     {
     }
 
-    public override async Task<ChatCompletion> CompleteAsync(
-        IList<ChatMessage> messages,
+    public override async Task<ChatResponse> GetResponseAsync(
+        IEnumerable<ChatMessage> messages,
         ChatOptions? options = null,
         CancellationToken cancellationToken = default)
     {
@@ -55,7 +55,7 @@ public class CompatibilityMiddleware : DelegatingChatClient
                 return m;
             }).ToList();
 
-            return await base.CompleteAsync(processedMessages, options, cancellationToken);
+            return await base.GetResponseAsync(processedMessages, options, cancellationToken);
         }
         catch (Exception ex) when (IsCompatibilityError(ex))
         {
@@ -63,16 +63,16 @@ public class CompatibilityMiddleware : DelegatingChatClient
             if (options != null && (ex.Message.Contains("tools") || ex.Message.Contains("400")))
             {
                 options.Tools = null;
-                return await base.CompleteAsync(messages, options, cancellationToken);
+                return await base.GetResponseAsync(messages, options, cancellationToken);
             }
 
-            return new ChatCompletion(new ChatMessage(ChatRole.Assistant,
+            return new ChatResponse(new ChatMessage(ChatRole.Assistant,
                 $"[Error de Compatibilidad]: {ex.Message}. " +
                 "Esto suele ocurrir por el 'Thinking Mode' o falta de soporte de herramientas. " +
                 "He intentado un reintento automático sin herramientas."))
             {
                 FinishReason = ChatFinishReason.Stop,
-                CompletionId = "compatibility-fallback-" + Guid.NewGuid().ToString("N")
+                ResponseId = "compatibility-fallback-" + Guid.NewGuid().ToString("N")
             };
         }
     }
@@ -86,17 +86,17 @@ public class CompatibilityMiddleware : DelegatingChatClient
                ex is ArgumentOutOfRangeException;
     }
 
-    public override async IAsyncEnumerable<StreamingChatCompletionUpdate> CompleteStreamingAsync(
-        IList<ChatMessage> messages,
+    public override async IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(
+        IEnumerable<ChatMessage> messages,
         ChatOptions? options = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        IAsyncEnumerable<StreamingChatCompletionUpdate>? updates = null;
+        IAsyncEnumerable<ChatResponseUpdate>? updates = null;
         string? errorMsg = null;
 
         try
         {
-            updates = base.CompleteStreamingAsync(messages, options, cancellationToken);
+            updates = base.GetStreamingResponseAsync(messages, options, cancellationToken);
         }
         catch (Exception ex) when (IsCompatibilityError(ex))
         {
@@ -105,14 +105,14 @@ public class CompatibilityMiddleware : DelegatingChatClient
 
         if (errorMsg != null || updates == null)
         {
-            yield return new StreamingChatCompletionUpdate { Contents = { new TextContent($"[Error Inicial DeepSeek: {errorMsg}]") } };
+            yield return new ChatResponseUpdate(ChatRole.Assistant, $"[Error Inicial DeepSeek: {errorMsg}]");
             yield break;
         }
 
         var enumerator = updates.GetAsyncEnumerator(cancellationToken);
         while (true)
         {
-            StreamingChatCompletionUpdate? update = null;
+            ChatResponseUpdate? update = null;
             try
             {
                 if (!await enumerator.MoveNextAsync()) break;
@@ -125,7 +125,7 @@ public class CompatibilityMiddleware : DelegatingChatClient
 
             if (errorMsg != null)
             {
-                yield return new StreamingChatCompletionUpdate { Contents = { new TextContent($"\n\n[Error de Metadata DeepSeek: {errorMsg}]") } };
+                yield return new ChatResponseUpdate(ChatRole.Assistant, $"\n\n[Error de Metadata DeepSeek: {errorMsg}]");
                 yield break;
             }
 

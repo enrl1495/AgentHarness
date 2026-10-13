@@ -9,22 +9,22 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _theme = "Dark";
+    public partial string Theme { get; set; } = "Dark";
 
     [ObservableProperty]
-    private string _model = "deepseek-v4-pro";
+    public partial string Model { get; set; } = "deepseek-v4-pro";
 
     [ObservableProperty]
-    private string _endpoint = "http://localhost:11434";
+    public partial string Endpoint { get; set; } = "http://localhost:11434";
 
     [ObservableProperty]
-    private bool _isMicaEnabled = true;
+    public partial bool IsMicaEnabled { get; set; } = true;
 
     [ObservableProperty]
-    private double _micaOpacity = 0.7;
+    public partial double MicaOpacity { get; set; } = 0.7;
 
     [ObservableProperty]
-    private string _accentColor = "#FF8C42";
+    public partial string AccentColor { get; set; } = "#FF8C42";
 
     /// <summary>
     /// Saves current settings (placeholder - no persistence yet).

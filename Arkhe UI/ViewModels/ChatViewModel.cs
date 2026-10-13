@@ -10,19 +10,19 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class ChatViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<ChatMessageViewModel> _messages = new();
+    public partial ObservableCollection<ChatMessageViewModel> Messages { get; set; } = new();
 
     [ObservableProperty]
-    private ObservableCollection<ChatMessageViewModel> _thoughtLog = new();
+    public partial ObservableCollection<ChatMessageViewModel> ThoughtLog { get; set; } = new();
 
     [ObservableProperty]
-    private string _inputText = string.Empty;
+    public partial string InputText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private bool _isProcessing;
+    public partial bool IsProcessing { get; set; }
 
     [ObservableProperty]
-    private double _contextUsage;
+    public partial double ContextUsage { get; set; }
 
     /// <summary>
     /// Sends the current input text as a user message.

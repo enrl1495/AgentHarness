@@ -23,8 +23,8 @@ public class VisionAgent
         // En MEAI, un ChatMessage puede contener una colección de AIContent (texto, imágenes, etc.)
         var contents = new List<AIContent>
         {
-            new TextContent(@"Sos un ingeniero en electrónica experto. Analizá esta imagen en detalle.
-Si es un circuito, DEBÉS devolver tu análisis en dos partes:
+            new TextContent(@"Eres un ingeniero en electrónica experto. Analiza esta imagen en detalle.
+Si es un circuito, DEBES devolver tu análisis en dos partes:
 1. Una descripción técnica detallada en texto explicando qué hace y cómo funciona.
 2. Un bloque JSON estricto al final (envuelto en ```json) que represente la topología (Netlist), con esta estructura exacta:
 {
@@ -34,7 +34,7 @@ Si es un circuito, DEBÉS devolver tu análisis en dos partes:
      { ""type"": ""Resistor"", ""id"": ""R1"", ""value"": ""10k"", ""connected_to"": [""N1_IN"", ""N2_OUT""] }
   ]
 }
-Si la imagen no es un circuito, solo transcribí o describí el contenido normalmente."),
+Si la imagen no es un circuito, solo transcribe o describe el contenido normalmente."),
             new DataContent(imageBytes, mediaType)
         };
 
@@ -42,8 +42,8 @@ Si la imagen no es un circuito, solo transcribí o describí el contenido normal
 
         try
         {
-            var response = await _chatClient.CompleteAsync(new[] { message }, options: null, cancellationToken: cancellationToken).ConfigureAwait(false);
-            return response.Message.Text?.Trim() ?? "No se pudo extraer información de la imagen.";
+            var response = await _chatClient.GetResponseAsync(new[] { message }, options: null, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return response.Text?.Trim() ?? "No se pudo extraer información de la imagen.";
         }
         catch (Exception ex)
         {

@@ -199,8 +199,8 @@ AgentHarness is a **.NET 10 AI agent orchestration harness** — a desktop + hea
 - **Issues**: These `Options` classes are defined but never registered in DI or consumed via `IOptions<T>`. They exist as documentation only — the actual tools hardcode their values.
 
 ### Agents (4 files) — `AgentHarness.Core.Agents`
-- **`VisionAgent.cs`** (53 lines): Multi-modal image analysis. Prompt is in **Spanish** ("Sos un ingeniero..."), catch returns error string in Spanish. 
-- **`SvgGeneratorAgent.cs`** (61 lines): SVG generation from netlist JSON. Prompt in **Spanish** ("Sos un generador experto..."). Good: markdown cleanup (````svg`, ````xml`, etc.).
+- **`VisionAgent.cs`** (53 lines): Multi-modal image analysis. Prompt is in **Spanish** ("Eres un ingeniero..."), catch returns error string in Spanish. 
+- **`SvgGeneratorAgent.cs`** (61 lines): SVG generation from netlist JSON. Prompt in **Spanish** ("Eres un generador experto..."). Good: markdown cleanup (````svg`, ````xml`, etc.).
 - **`StrategyAgent.cs`** (57 lines): Routes files to indexing strategy. **English** prompt — good. `Enum.TryParse` with extension-based fallback.
 - **`FileAnalyzerAgent.cs`** (60 lines): Metadata extraction. **English** prompt — good. Markdown cleanup. Graceful fallback on parse errors.
 - **Key issue**: These agents are concrete classes, not behind interfaces. The design says this is acceptable (internal pipeline details), but they're `public` so they leak outside Core.

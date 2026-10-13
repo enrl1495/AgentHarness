@@ -13,7 +13,7 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class SkillsViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<SkillViewModel> _skills = new();
+    public partial ObservableCollection<SkillViewModel> Skills { get; set; } = new();
 
     public SkillsViewModel()
     {

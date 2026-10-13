@@ -12,13 +12,13 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class LibraryViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _searchText = string.Empty;
+    public partial string SearchText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<LibraryEntryViewModel> _results = new();
+    public partial ObservableCollection<LibraryEntryViewModel> Results { get; set; } = new();
 
     [ObservableProperty]
-    private LibraryEntryViewModel? _selectedEntry;
+    public partial LibraryEntryViewModel? SelectedEntry { get; set; }
 
     public LibraryViewModel()
     {

@@ -91,7 +91,7 @@ public class SummarizationCompactionStrategy : ICompactionStrategy
             summaryPrompt += $"{m.Role}: {m.Text}\n";
         }
 
-        var response = await _chatClient.CompleteAsync(summaryPrompt, options: null, cancellationToken: ct).ConfigureAwait(false);
-        return response.Message.Text?.Trim() ?? "Summary unavailable.";
+        var response = await _chatClient.GetResponseAsync(summaryPrompt, options: null, cancellationToken: ct).ConfigureAwait(false);
+        return response.Text?.Trim() ?? "Summary unavailable.";
     }
 }

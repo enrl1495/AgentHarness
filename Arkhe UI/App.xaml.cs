@@ -49,28 +49,25 @@ public partial class App : Application
 
     private sealed class NoOpChatClient : IChatClient
     {
-        public Task<ChatCompletion> CompleteAsync(
-            IList<ChatMessage> messages,
+        public Task<ChatResponse> GetResponseAsync(
+            IEnumerable<ChatMessage> messages,
             ChatOptions? options = null,
             CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(new ChatCompletion(new ChatMessage(ChatRole.Assistant, "No IChatClient configured.")));
+            return Task.FromResult(new ChatResponse(new ChatMessage(ChatRole.Assistant, "No IChatClient configured.")));
         }
 
-        public IAsyncEnumerable<StreamingChatCompletionUpdate> CompleteStreamingAsync(
-            IList<ChatMessage> messages,
+        public IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(
+            IEnumerable<ChatMessage> messages,
             ChatOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             return GetStreamingAsync();
 
-            async IAsyncEnumerable<StreamingChatCompletionUpdate> GetStreamingAsync(
+            async IAsyncEnumerable<ChatResponseUpdate> GetStreamingAsync(
                 [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken ct = default)
             {
-                yield return new StreamingChatCompletionUpdate
-                {
-                    Text = "No IChatClient configured."
-                };
+                yield return new ChatResponseUpdate(ChatRole.Assistant, "No IChatClient configured.");
             }
         }
 

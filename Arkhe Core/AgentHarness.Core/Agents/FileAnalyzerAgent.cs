@@ -35,9 +35,9 @@ Content:
 
         try
         {
-            var response = await _chatClient.CompleteAsync(prompt, options: null, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var response = await _chatClient.GetResponseAsync(prompt, options: null, cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            var text = response.Message.Text?.Trim() ?? "{}";
+            var text = response.Text?.Trim() ?? "{}";
 
             // Cleanup markdown formatting if the model ignored instructions
             if (text.StartsWith("```json")) text = text.Substring(7);

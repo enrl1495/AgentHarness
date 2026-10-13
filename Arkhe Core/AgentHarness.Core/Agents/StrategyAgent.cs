@@ -35,8 +35,8 @@ Preview (first 1000 chars):
 
         try
         {
-            var response = await _chatClient.CompleteAsync(prompt, options: null, cancellationToken: cancellationToken).ConfigureAwait(false);
-            var strategyText = response.Message.Text?.Trim() ?? string.Empty;
+            var response = await _chatClient.GetResponseAsync(prompt, options: null, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var strategyText = response.Text?.Trim() ?? string.Empty;
 
             if (Enum.TryParse<IndexingStrategy>(strategyText, true, out var strategy))
             {

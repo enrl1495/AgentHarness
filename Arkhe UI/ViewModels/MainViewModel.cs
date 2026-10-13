@@ -8,10 +8,10 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
-    private PageKey _selectedPage = PageKey.Home;
+    public partial PageKey SelectedPage { get; set; } = PageKey.Home;
 
     [ObservableProperty]
-    private string? _selectedFooterItem;
+    public partial string? SelectedFooterItem { get; set; }
 
     /// <summary>
     /// Footer items for the PaneFooter SelectorBar.

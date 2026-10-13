@@ -10,25 +10,25 @@ namespace AgentHarness.WinUI.ViewModels;
 public partial class ChatMessageViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _text = string.Empty;
+    public partial string Text { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private bool _isUser;
+    public partial bool IsUser { get; set; }
 
     [ObservableProperty]
-    private DateTime _timestamp = DateTime.Now;
+    public partial DateTime Timestamp { get; set; } = DateTime.Now;
 
     [ObservableProperty]
-    private int? _latencyMs;
+    public partial int? LatencyMs { get; set; }
 
     [ObservableProperty]
-    private int? _tokensUsed;
+    public partial int? TokensUsed { get; set; }
 
     [ObservableProperty]
-    private string? _thoughtContent;
+    public partial string? ThoughtContent { get; set; }
 
     [ObservableProperty]
-    private bool _isThoughtExpanded;
+    public partial bool IsThoughtExpanded { get; set; }
 
     /// <summary>
     /// Command to toggle the thought content expansion state.
